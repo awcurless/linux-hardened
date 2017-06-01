@@ -557,6 +557,14 @@ unsigned long arch_align_stack(unsigned long sp)
 	return sp & ~0xf;
 }
 
+unsigned long arch_randomize_brk(struct mm_struct *mm)
+{
+	if (is_compat_task())
+		return mm->brk + get_random_long() % SZ_32M;
+	else
+		return mm->brk + get_random_long() % SZ_1G;
+}
+
 /*
  * Called from setup_new_exec() after (COMPAT_)SET_PERSONALITY.
  */

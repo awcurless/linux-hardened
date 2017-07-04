@@ -2381,11 +2381,6 @@ static __latent_entropy void rcu_core(void)
 	trace_rcu_utilization(TPS("End RCU core"));
 }
 
-static void rcu_core_si(struct softirq_action *h)
-{
-	rcu_core();
-}
-
 static void rcu_wake_cond(struct task_struct *t, int status)
 {
 	/*
@@ -3530,7 +3525,7 @@ void __init rcu_init(void)
 	if (dump_tree)
 		rcu_dump_rcu_node_tree();
 	if (use_softirq)
-		open_softirq(RCU_SOFTIRQ, rcu_core_si);
+		open_softirq(RCU_SOFTIRQ, rcu_core);
 
 	/*
 	 * We don't need protection against CPU-hotplug here because
